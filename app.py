@@ -41,7 +41,7 @@ with st.form("prediction_form"):
                                       "Talegaon Dabhade","Chakan","Baramati","Daund","Shirur",
                                       "Sasvad","Alandi","Jejuri","Bhor","Junnar","Satara","Mahabaleshwar",
                                       "Panchgani","Matheran","Ahilyanagar (Ahmednagar)","Nashik","Mumbai",
-                                      "Navi Mumbai","Thane","Kalyan","Kolhapur","Solapur")
+                                      "Navi Mumbai","Thane","Kalyan","Kolhapur","Solapur"])
         bmi = st.number_input("BMI", min_value=10.0, max_value=60.0, value=25.0)
         family_history_diabetes = st.selectbox("Family History of Diabetes", ["No", "Yes"])
         
