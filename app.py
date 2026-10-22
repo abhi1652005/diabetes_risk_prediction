@@ -92,23 +92,18 @@ if submitted:
     })
 
     try:
+        prediction = model.predict(input_data)
+        
+        # Convert 1/0 (or numeric outputs) to "Yes" or "No"
+        pred_val = prediction[0]
+        if pred_val == 1 or str(pred_val).lower() in ['1', 'true', 'yes']:
+            result_text = "Yes"
+        else:
+            result_text = "No"
+            
         st.markdown("---")
         st.subheader("Prediction Results")
+        st.success(f"The model prediction is: **{result_text}**")
         
-        # Check if the model supports probability calculation
-        if hasattr(model, "predict_proba"):
-            probabilities = model.predict_proba(input_data)[0]
-            classes = model.classes_
-            
-            st.write("### Confidence Breakdown:")
-            for cls, prob in zip(classes, probabilities):
-                percentage = prob * 100
-                st.progress(float(prob), text=f"**{cls}**: {percentage:.2f}%")
-        else:
-            # Fallback if model was trained without probability=True
-            prediction = model.predict(input_data)
-            st.success(f"The model prediction is: **{prediction[0]}**")
-            st.info("Tip: To display percentages, train your model using `SVC(probability=True)`.")
-            
     except Exception as e:
         st.error(f"Prediction Error: {e}")
