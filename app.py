@@ -37,7 +37,7 @@ with st.form("prediction_form"):
     with col1:
         age = st.number_input("Age", min_value=0, max_value=120, value=30)
         gender = st.selectbox("Gender", ["Male", "Female", "Other"])
-        city = st.text_input("City", ["Pimpri-Chinchwad","Lonavala","Khandala",
+        city = st.selectbox("City", ["Pimpri-Chinchwad","Lonavala","Khandala",
                                       "Talegaon Dabhade","Chakan","Baramati","Daund","Shirur",
                                       "Sasvad","Alandi","Jejuri","Bhor","Junnar","Satara","Mahabaleshwar",
                                       "Panchgani","Matheran","Ahilyanagar (Ahmednagar)","Nashik","Mumbai",
