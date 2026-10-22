@@ -59,8 +59,8 @@ with st.form("prediction_form"):
 
     submitted = st.form_submit_button("Predict", use_container_width=True)
 
-    if submitted:
-    # --- STEP 1: Categorical Inputs Mapping ---
+if submitted:
+    # Mappings for categorical inputs
     gender_map = {"Male": 0, "Female": 1, "Other": 2}
     activity_map = {"Low": 0, "Moderate": 1, "High": 2}
     diet_map = {"Balanced": 0, "Vegetarian": 1, "Vegan": 2, "Keto": 3, "Other": 4}
@@ -68,14 +68,13 @@ with st.form("prediction_form"):
     alcohol_map = {"None": 0, "Low": 1, "Moderate": 2, "High": 3}
     income_map = {"Low": 0, "Medium": 1, "High": 2}
     
-    # City sathi text la number mad convert karne (hash vaprun)
     city_code = abs(hash(city)) % 50 
     
-    # --- STEP 2: Input DataFrame (City sobat) ---
+    # Construct input dataframe matching model features
     input_data = pd.DataFrame({
         'age': [age],
         'gender': [gender_map.get(gender, 0)],
-        'city': [city_code],  # <--- Ha 'city' column aata parat add kela ahe!
+        'city': [city_code],
         'bmi': [bmi],
         'family_history_diabetes': [1 if family_history_diabetes == "Yes" else 0],
         'physical_activity_level': [activity_map.get(physical_activity_level, 0)],
@@ -93,13 +92,9 @@ with st.form("prediction_form"):
     })
 
     try:
-        # Prediction kara
         prediction = model.predict(input_data)
-        
         st.markdown("---")
         st.subheader("Prediction Results")
         st.success(f"The model prediction is: **{prediction[0]}**")
-        
     except Exception as e:
         st.error(f"Prediction Error: {e}")
-        )
