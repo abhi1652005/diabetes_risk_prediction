@@ -91,7 +91,7 @@ if submitted:
         'income_bracket': [income_map.get(income_bracket, 0)]
     })
 
-   try:
+    try:
         prediction = model.predict(input_data)
         
         # Convert 1/0 (or numeric outputs) to "Yes" or "No"
