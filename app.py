@@ -92,17 +92,28 @@ if submitted:
     })
 
     try:
-        prediction = model.predict(input_data)
-        
-        # Convert 1/0 (or numeric outputs) to "Yes" or "No"
-        pred_val = prediction[0]
-        if pred_val == 1 or str(pred_val).lower() in ['1', 'true', 'yes']:
-            result_text = "Yes"
+        # Check if the model supports probability calculation
+        if hasattr(model, "predict_proba"):
+            probabilities = model.predict_proba(input_data)[0]
+            classes = model.classes_
+            
+            # Get the highest probability class and its percentage score
+            max_index = np.argmax(probabilities)
+            predicted_class = classes[max_index]
+            confidence_percentage = probabilities[max_index] * 100
+            
+            result_text = f"**{predicted_class}** (Confidence: **{confidence_percentage:.2f}%**)"
         else:
-            result_text = "No"
+            # Fallback if probability=False was used during training
+            prediction = model.predict(input_data)
+            result_text = f"**{prediction[0]}**"
             
         st.markdown("---")
         st.subheader("Prediction Results")
+        st.success(f"The model prediction is: {result_text}")
+        
+    except Exception as e:
+        st.error(f"Prediction Error: {e}")
         st.success(f"The model prediction is: **{result_text}**")
         
     except Exception as e:
