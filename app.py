@@ -58,21 +58,26 @@ with st.form("prediction_form"):
         income_bracket = st.selectbox("Income Bracket", ["Low", "Medium", "High"])
 
     submitted = st.form_submit_button("Predict", use_container_width=True)
-
 if submitted:
-    # Construct input dataframe matching model features
-    # Note: If your training pipeline used categorical encoding (like One-Hot or Label Encoding), 
-    # ensure these inputs match the exact preprocessing steps used during training.
+    # --- STEP 1: Categorical (Text) Inputs na Numbers madhe convert kara ---
+    # (Tya values che numbers tech theva je tu model train kartana vaparle hote)
+    gender_map = {"Male": 0, "Female": 1, "Other": 2}
+    activity_map = {"Low": 0, "Moderate": 1, "High": 2}
+    diet_map = {"Balanced": 0, "Vegetarian": 1, "Vegan": 2, "Keto": 3, "Other": 4}
+    smoking_map = {"Never": 0, "Former": 1, "Current": 2}
+    alcohol_map = {"None": 0, "Low": 1, "Moderate": 2, "High": 3}
+    income_map = {"Low": 0, "Medium": 1, "High": 2}
+    
+    # --- STEP 2: Input DataFrame tayar kara ---
     input_data = pd.DataFrame({
         'age': [age],
-        'gender': [gender],
-        'city': [city],
+        'gender': [gender_map.get(gender, 0)],
         'bmi': [bmi],
         'family_history_diabetes': [1 if family_history_diabetes == "Yes" else 0],
-        'physical_activity_level': [physical_activity_level],
-        'diet_type': [diet_type],
-        'smoking_status': [smoking_status],
-        'alcohol_consumption': [alcohol_consumption],
+        'physical_activity_level': [activity_map.get(physical_activity_level, 0)],
+        'diet_type': [diet_map.get(diet_type, 0)],
+        'smoking_status': [smoking_map.get(smoking_status, 0)],
+        'alcohol_consumption': [alcohol_map.get(alcohol_consumption, 0)],
         'hours_sleep_per_night': [hours_sleep_per_night],
         'stress_level': [stress_level],
         'fasting_blood_sugar': [fasting_blood_sugar],
@@ -80,15 +85,19 @@ if submitted:
         'blood_pressure_systolic': [blood_pressure_systolic],
         'blood_pressure_diastolic': [blood_pressure_diastolic],
         'waist_circumference_cm': [waist_circumference_cm],
-        'income_bracket': [income_bracket]
+        'income_bracket': [income_map.get(income_bracket, 0)]
     })
 
     try:
+        # Prediction kara
         prediction = model.predict(input_data)
+        
         st.markdown("---")
         st.subheader("Prediction Results")
         st.success(f"The model prediction is: **{prediction[0]}**")
+        
     except Exception as e:
+        st.error(f"Prediction Error: {e}")
         # Fallback message if raw categorical columns need encoding transformations
         st.warning(
             "Note: If your SVC model expects purely numerical features, make sure to apply the same "
