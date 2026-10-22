@@ -24,7 +24,7 @@ except Exception as e:
     st.stop()
 
 # App Header
-st.title("🩺 Health Risk & Diabetes Prediction App")
+st.title("🩺 Health Risk & Diabetes Prediction..! ")
 st.markdown("Please fill in the patient details below to get the prediction from the SVC model.")
 st.markdown("---")
 
@@ -37,7 +37,11 @@ with st.form("prediction_form"):
     with col1:
         age = st.number_input("Age", min_value=0, max_value=120, value=30)
         gender = st.selectbox("Gender", ["Male", "Female", "Other"])
-        city = st.text_input("City", value="New York")
+        city = st.text_input("City", ["Pimpri-Chinchwad","Lonavala","Khandala",
+                                      "Talegaon Dabhade","Chakan","Baramati","Daund","Shirur",
+                                      "Sasvad","Alandi","Jejuri","Bhor","Junnar","Satara","Mahabaleshwar",
+                                      "Panchgani","Matheran","Ahilyanagar (Ahmednagar)","Nashik","Mumbai",
+                                      "Navi Mumbai","Thane","Kalyan","Kolhapur","Solapur")
         bmi = st.number_input("BMI", min_value=10.0, max_value=60.0, value=25.0)
         family_history_diabetes = st.selectbox("Family History of Diabetes", ["No", "Yes"])
         
@@ -103,7 +107,7 @@ if submitted:
             
         st.markdown("---")
         st.subheader("Prediction Results")
-        st.success(f"The model prediction is: **{result_text}**")
+        st.success(f"Risk Diabetes..!: **{result_text}**")
         
     except Exception as e:
         st.error(f"Prediction Error: {e}")
