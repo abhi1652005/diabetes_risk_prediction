@@ -92,29 +92,23 @@ if submitted:
     })
 
     try:
+        st.markdown("---")
+        st.subheader("Prediction Results")
+        
         # Check if the model supports probability calculation
         if hasattr(model, "predict_proba"):
             probabilities = model.predict_proba(input_data)[0]
             classes = model.classes_
             
-            # Get the highest probability class and its percentage score
-            max_index = np.argmax(probabilities)
-            predicted_class = classes[max_index]
-            confidence_percentage = probabilities[max_index] * 100
-            
-            result_text = f"**{predicted_class}** (Confidence: **{confidence_percentage:.2f}%**)"
+            st.write("### Confidence Breakdown:")
+            for cls, prob in zip(classes, probabilities):
+                percentage = prob * 100
+                st.progress(float(prob), text=f"**{cls}**: {percentage:.2f}%")
         else:
-            # Fallback if probability=False was used during training
+            # Fallback if model was trained without probability=True
             prediction = model.predict(input_data)
-            result_text = f"**{prediction[0]}**"
+            st.success(f"The model prediction is: **{prediction[0]}**")
+            st.info("Tip: To display percentages, train your model using `SVC(probability=True)`.")
             
-        st.markdown("---")
-        st.subheader("Prediction Results")
-        st.success(f"The model prediction is: {result_text}")
-        
-    except Exception as e:
-        st.error(f"Prediction Error: {e}")
-        st.success(f"The model prediction is: **{result_text}**")
-        
     except Exception as e:
         st.error(f"Prediction Error: {e}")
